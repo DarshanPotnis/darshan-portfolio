@@ -6,35 +6,62 @@ import { motion, useMotionValue } from "framer-motion";
 
 function MagneticButton({
   label,
+  onClick,
   href,
   external,
 }: {
   label: string;
-  href: string;
+  onClick?: () => void;
+  href?: string;
   external?: boolean;
 }) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
+  // External link (Resume)
+  if (href) {
+    return (
+      <motion.a
+        href={href}
+        target={external ? "_blank" : undefined}
+        onMouseMove={(e) => {
+          if (typeof window !== "undefined" && window.innerWidth < 768) return;
+          const rect = e.currentTarget.getBoundingClientRect();
+          x.set((e.clientX - rect.left - rect.width / 2) * 0.12);
+          y.set((e.clientY - rect.top - rect.height / 2) * 0.12);
+        }}
+        onMouseLeave={() => {
+          x.set(0);
+          y.set(0);
+        }}
+        style={{ x, y }}
+        transition={{
+          type: "spring",
+          stiffness: 120,
+          damping: 18,
+          mass: 0.4,
+        }}
+        className="px-7 py-3 rounded-xl border border-lime-400/40
+                   text-lime-300 font-semibold
+                   hover:bg-lime-300/10 transition-colors"
+      >
+        {label}
+      </motion.a>
+    );
+  }
+
+  // Section navigation button
   return (
-    <motion.a
-      href={href}
-      target={external ? "_blank" : undefined}
+    <motion.button
+      type="button"
+      onClick={onClick}
       onMouseMove={(e) => {
-        // Disable magnetic effect on mobile
         if (typeof window !== "undefined" && window.innerWidth < 768) return;
-
         const rect = e.currentTarget.getBoundingClientRect();
-
-        const moveX = (e.clientX - rect.left - rect.width / 2) * 0.12;
-        const moveY = (e.clientY - rect.top - rect.height / 2) * 0.12;
-
-        x.set(moveX);
-        y.set(moveY);
+        x.set((e.clientX - rect.left - rect.width / 2) * 0.12);
+        y.set((e.clientY - rect.top - rect.height / 2) * 0.12);
       }}
       onMouseLeave={() => {
-        if (typeof window !== "undefined" && window.innerWidth < 768) return;
-
         x.set(0);
         y.set(0);
       }}
@@ -47,18 +74,22 @@ function MagneticButton({
       }}
       className="px-7 py-3 rounded-xl border border-lime-400/40
                  text-lime-300 font-semibold
-                 hover:bg-lime-300/10 transition-colors"
+                 hover:bg-lime-300/10 transition-colors cursor-pointer"
     >
       {label}
-    </motion.a>
+    </motion.button>
   );
 }
 
 /* -------------------- HERO SECTION -------------------- */
 
-export default function Hero() {
+export default function Hero({
+  onNavigate,
+}: {
+  onNavigate: (section: "about" | "skills" | "projects") => void;
+}) {
   return (
-    <section className="min-h-[90vh] flex flex-col items-center justify-start pt-16 sm:pt-20 px-6 text-center">
+    <section className="min-h-screen flex flex-col items-center justify-center px-6 text-center">
       {/* Avatar */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
@@ -112,10 +143,21 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.65 }}
-        className="mt-10 flex gap-4 flex-wrap justify-center"
+        className="mt-12 flex flex-wrap justify-center gap-4
+                   w-full max-w-5xl mx-auto"
       >
-        <MagneticButton label="View Projects" href="#projects" />
-        <MagneticButton label="View Tech Stack" href="#skills" />
+        <MagneticButton
+          label="About Me"
+          onClick={() => onNavigate("about")}
+        />
+        <MagneticButton
+          label="View Tech Stack"
+          onClick={() => onNavigate("skills")}
+        />
+        <MagneticButton
+          label="View Projects"
+          onClick={() => onNavigate("projects")}
+        />
         <MagneticButton
           label="Download Resume"
           href="/Darshan_Potnis_Resume_2026.pdf"

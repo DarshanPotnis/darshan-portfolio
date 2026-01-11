@@ -60,28 +60,46 @@ const projects = [
       "Reduced manual effort by 80%",
       "Modular AI pipeline architecture",
     ],
-  }
+  },
 ];
 
-export default function ProjectsSection() {
+export default function ProjectsSection({
+  onBack,
+}: {
+  onBack: () => void;
+}) {
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [open, setOpen] = useState(false);
 
   return (
     <Section>
-      <section id="projects" className="py-28 bg-[#0f1115]">
+      <motion.section
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 40 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="min-h-screen bg-[#0f1115] px-6 py-24"
+      >
+        {/* Back Button */}
+        <button
+          onClick={onBack}
+          className="absolute top-6 left-6 text-lime-300 text-sm font-semibold
+                     hover:underline"
+        >
+          ← Back
+        </button>
+
         <h2 className="text-center text-3xl sm:text-4xl font-bold text-lime-300 mb-14">
           Projects
         </h2>
 
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {projects.map((p, i) => (
             <motion.article
               key={p.title}
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
               whileHover={
                 typeof window !== "undefined" && window.innerWidth > 768
                   ? { y: -6 }
@@ -183,7 +201,7 @@ export default function ProjectsSection() {
           onClose={() => setOpen(false)}
           project={selectedProject}
         />
-      </section>
+      </motion.section>
     </Section>
   );
 }

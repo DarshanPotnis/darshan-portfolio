@@ -46,10 +46,29 @@ const deviconMap: Record<string, string> = {
   firebase: "devicon-firebase-plain colored",
 };
 
-export default function TechStackSection() {
+export default function TechStackSection({
+  onBack,
+}: {
+  onBack: () => void;
+}) {
   return (
     <Section>
-      <section id="skills" className="py-28 bg-[#0f1115]">
+      <motion.section
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 40 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="min-h-screen bg-[#0f1115] px-6 py-24"
+      >
+        {/* Back Button */}
+        <button
+          onClick={onBack}
+          className="absolute top-6 left-6 text-lime-300 text-sm font-semibold
+                     hover:underline"
+        >
+          ← Back
+        </button>
+
         <h2 className="text-center text-3xl sm:text-4xl font-bold text-lime-300 mb-4">
           Tech Stack
         </h2>
@@ -58,14 +77,13 @@ export default function TechStackSection() {
           Core focus on backend systems, real-time infrastructure, and cloud-native architecture
         </p>
 
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {categories.map((cat, i) => (
             <motion.div
               key={cat.title}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.08 }}
               whileHover={{ y: -4 }}
               className="rounded-2xl border border-lime-400/20 bg-slate-900/40 p-6
                          hover:border-lime-300/60 hover:shadow-[0_0_25px_rgba(190,242,100,0.25)] transition-all"
@@ -80,16 +98,15 @@ export default function TechStackSection() {
                     key={s}
                     className={`${deviconMap[s]} text-4xl`}
                     initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: idx * 0.05 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.08 + idx * 0.04 }}
                   />
                 ))}
               </div>
             </motion.div>
           ))}
         </div>
-      </section>
+      </motion.section>
     </Section>
   );
 }
