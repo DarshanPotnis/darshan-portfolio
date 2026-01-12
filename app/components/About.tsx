@@ -20,10 +20,11 @@ export default function About({
         {/* Back Button */}
         <button
           onClick={onBack}
-          className="absolute top-6 left-6 text-lime-300 text-sm font-semibold
-                     hover:underline"
+          className="absolute top-4 left-4 px-3 py-2
+                        text-lime-300 text-sm font-semibold
+                        hover:underline"
         >
-          ← Back
+            ← Back
         </button>
 
         <div className="max-w-4xl mx-auto text-center">

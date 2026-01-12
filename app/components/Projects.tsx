@@ -78,21 +78,24 @@ export default function ProjectsSection({
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 40 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="min-h-screen bg-[#0f1115] px-6 py-24"
+        className="relative min-h-screen bg-[#0f1115] px-6 py-24"
       >
         {/* Back Button */}
         <button
           onClick={onBack}
-          className="absolute top-6 left-6 text-lime-300 text-sm font-semibold
+          className="absolute top-4 left-4 px-3 py-2
+                     text-lime-300 text-sm font-semibold
                      hover:underline"
         >
           ← Back
         </button>
 
+        {/* Title */}
         <h2 className="text-center text-3xl sm:text-4xl font-bold text-lime-300 mb-14">
           Projects
         </h2>
 
+        {/* Grid */}
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {projects.map((p, i) => (
             <motion.article
