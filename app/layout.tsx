@@ -55,8 +55,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Darshan Potnis | Backend Software Developer",
-    description:
-      "Scalable backend systems, real-time infrastructure, and clean APIs.",
+    description: "Scalable backend systems, real-time infrastructure, and clean APIs.",
     images: ["/og.png"],
   },
 };
@@ -69,7 +68,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Devicons */}
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
@@ -79,7 +77,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#0f1115] text-slate-50 overflow-x-hidden`}
       >
-        {/* Global animation configuration */}
         <MotionConfig
           transition={{
             type: "spring",

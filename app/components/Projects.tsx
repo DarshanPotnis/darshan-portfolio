@@ -44,23 +44,26 @@ const projects = [
     ],
   },
   {
-    title: "AI Video Storyboard Generator",
+    title: "API Rate Limiter & Gateway",
     description:
-      "AI-powered pipeline that converts scripts into visual storyboards using LLMs and diffusion models.",
-    stack: ["Python", "GPT", "Stable Diffusion", "Flask", "FFmpeg"],
-    image: "/Video.png",
+      "Production-grade API gateway with Redis-backed rate limiting, API key authentication, HTTP 429 enforcement, and a live monitoring dashboard with tier simulation + reset countdowns.",
+    stack: ["FastAPI", "Redis", "Python", "REST APIs", "JavaScript", "HTML/CSS"],
+    image: "/RateLimiter.png",
+    liveUrl: "https://github.com/DarshanPotnis/api-rate-limiter",
     architecture: [
-      "User submits script via frontend",
-      "Backend processes text using LLM",
-      "Stable Diffusion generates storyboard frames",
-      "FFmpeg stitches frames into video output",
+      "Requests routed through FastAPI gateway",
+      "API key authentication validates clients",
+      "Redis stores per-key counters with TTL windows",
+      "Over-limit requests return HTTP 429 + reset metadata",
+      "Dashboard shows tier simulation + live reset countdowns",
     ],
     metrics: [
-      "Automated storyboard generation",
-      "Reduced manual effort by 80%",
-      "Modular AI pipeline architecture",
+      "Redis-backed rate limiting with TTL resets",
+      "API key auth to protect backend services",
+      "HTTP 429 enforcement against abuse",
+      "Tier-based access simulation + live countdown UI",
     ],
-  },
+  },  
 ];
 
 export default function ProjectsSection({
