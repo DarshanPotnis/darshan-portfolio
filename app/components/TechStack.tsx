@@ -1,117 +1,85 @@
 "use client";
 
-import { motion } from "framer-motion";
-import Section from "./Section";
-
-/* -------------------- TECH STACK DATA -------------------- */
-
-const categories = [
-  { title: "Programming Languages", skills: ["python", "java", "cplusplus", "javascript", "sql", "bash"] },
-  {
-    title: "Backend & Frontend Frameworks",
-    skills: ["nodejs", "express", "flask", "django", "react", "nextjs", "tailwindcss", "docker", "git", "redis"],
-  },
-  { title: "Cloud, DevOps & Infrastructure", skills: ["aws", "googlecloud", "azure", "kubernetes", "terraform"] },
-  { title: "Testing & APIs", skills: ["selenium", "postman"] },
-  { title: "Databases", skills: ["postgresql", "mongodb", "mysql", "firebase"] },
+const SKILLS = [
+  { cat: "LANGUAGES",    tools: [
+    { icon: "devicon-python-plain colored",             label: "Python"     },
+    { icon: "devicon-javascript-plain colored",         label: "JavaScript" },
+    { icon: "devicon-java-plain colored",               label: "Java"       },
+    { icon: "devicon-cplusplus-plain colored",          label: "C++"        },
+    { icon: "devicon-mysql-plain colored",              label: "SQL"        },
+    { icon: "devicon-bash-plain colored",               label: "Bash"       },
+  ]},
+  { cat: "BACKEND",      tools: [
+    { icon: "devicon-nodejs-plain colored",             label: "Node.js"    },
+    { icon: "devicon-flask-original",                   label: "Flask",     style: { color: "#fff" } },
+    { icon: "devicon-redis-plain colored",              label: "Redis"      },
+    { icon: "devicon-docker-plain colored",             label: "Docker"     },
+    { icon: "devicon-react-original colored",           label: "React"      },
+    { icon: "devicon-nextjs-original",                  label: "Next.js",   style: { color: "#fff" } },
+    { icon: "devicon-git-plain colored",                label: "Git"        },
+  ]},
+  { cat: "CLOUD / DEVOPS", tools: [
+    { icon: "devicon-amazonwebservices-original colored", label: "AWS"       },
+    { icon: "devicon-googlecloud-plain colored",          label: "GCP"       },
+    { icon: "devicon-azure-plain colored",                label: "Azure"     },
+    { icon: "devicon-kubernetes-plain colored",           label: "Kubernetes"},
+    { icon: "devicon-terraform-plain colored",            label: "Terraform" },
+  ]},
+  { cat: "DATABASES",    tools: [
+    { icon: "devicon-postgresql-plain colored",         label: "PostgreSQL" },
+    { icon: "devicon-mongodb-plain colored",            label: "MongoDB"    },
+    { icon: "devicon-mysql-plain colored",              label: "MySQL"      },
+    { icon: "devicon-firebase-plain colored",           label: "Firebase"   },
+  ]},
 ];
 
-const deviconMap: Record<string, string> = {
-  python: "devicon-python-plain colored",
-  java: "devicon-java-plain colored",
-  cplusplus: "devicon-cplusplus-plain colored",
-  javascript: "devicon-javascript-plain colored",
-  sql: "devicon-mysql-plain colored",
-  bash: "devicon-bash-plain colored",
-  nodejs: "devicon-nodejs-plain colored",
-  express: "devicon-express-original",
-  flask: "devicon-flask-original",
-  django: "devicon-django-plain colored",
-  react: "devicon-react-original colored",
-  nextjs: "devicon-nextjs-original",
-  tailwindcss: "devicon-tailwindcss-original-wordmark colored",
-  docker: "devicon-docker-plain colored",
-  git: "devicon-git-plain colored",
-  redis: "devicon-redis-plain colored",
-  aws: "devicon-amazonwebservices-original colored",
-  googlecloud: "devicon-googlecloud-plain colored",
-  azure: "devicon-azure-plain colored",
-  kubernetes: "devicon-kubernetes-plain colored",
-  terraform: "devicon-terraform-plain colored",
-  selenium: "devicon-selenium-original colored",
-  postman: "devicon-postman-plain colored",
-  postgresql: "devicon-postgresql-plain colored",
-  mongodb: "devicon-mongodb-plain colored",
-  mysql: "devicon-mysql-plain colored",
-  firebase: "devicon-firebase-plain colored",
-};
+const FOCUS = [
+  "Distributed Systems","Microservices","Event-Driven Architecture","Caching Strategies",
+  "Rate Limiting","Concurrency","Real-Time Systems","REST APIs",
+  "GraphQL","WebSockets","CI/CD Pipelines","System Design","Cloud Infrastructure",
+];
 
-export default function TechStackSection({
-  onBack,
-}: {
-  onBack: () => void;
-}) {
+export default function TechStack() {
   return (
-    <Section>
-      <motion.section
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 40 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="relative min-h-screen bg-[#0f1115] px-6 py-24"
-      >
-        {/* Back Button */}
-        <button
-          onClick={onBack}
-          className="absolute top-4 left-4 px-3 py-2
-                     text-lime-300 text-sm font-semibold
-                     hover:underline"
-        >
-          ← Back
-        </button>
+    <>
+      <div className="pg-header">
+        <div className="pg-eyebrow">stack.dat</div>
+        <h1 className="pg-title">TECH_STACK</h1>
+        <p className="pg-sub">Backend-first · Cloud-native · Real-time obsessed</p>
+      </div>
 
-        {/* Title */}
-        <h2 className="text-center text-3xl sm:text-4xl font-bold text-lime-300 mb-4">
-          Tech Stack
-        </h2>
-
-        {/* Subtitle */}
-        <p className="text-center text-slate-400 mb-14 px-4">
-          Core focus on backend systems, real-time infrastructure, and cloud-native architecture
-        </p>
-
-        {/* Grid */}
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {categories.map((cat, i) => (
-            <motion.div
-              key={cat.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.08 }}
-              whileHover={{ y: -4 }}
-              className="rounded-2xl border border-lime-400/20 bg-slate-900/40 p-6
-                         hover:border-lime-300/60 hover:shadow-[0_0_25px_rgba(190,242,100,0.25)]
-                         transition-all"
-            >
-              <h3 className="text-lg font-semibold text-lime-200 mb-5 text-center">
-                {cat.title}
-              </h3>
-
-              <div className="flex flex-wrap justify-center gap-4">
-                {cat.skills.map((s, idx) => (
-                  <motion.i
-                    key={s}
-                    className={`${deviconMap[s]} text-4xl`}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.08 + idx * 0.04 }}
-                  />
-                ))}
-              </div>
-            </motion.div>
+      <table className="skill-table">
+        <thead>
+          <tr>
+            <th>CATEGORY</th>
+            <th>TOOLS &amp; TECHNOLOGIES</th>
+          </tr>
+        </thead>
+        <tbody>
+          {SKILLS.map(row => (
+            <tr key={row.cat}>
+              <td className="sk-cat">{row.cat}</td>
+              <td>
+                <div className="sk-icons">
+                  {row.tools.map(tool => (
+                    <div key={tool.label} className="sk-item">
+                      <i className={tool.icon} style={(tool as any).style} />
+                      {tool.label}
+                    </div>
+                  ))}
+                </div>
+              </td>
+            </tr>
           ))}
-        </div>
-      </motion.section>
-    </Section>
+        </tbody>
+      </table>
+
+      <div style={{ fontSize: 9, color: "var(--muted2)", letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: 10, display: "flex", gap: 8 }}>
+        <span style={{ color: "var(--green)" }}>//</span> SYSTEM_DESIGN_FOCUS
+      </div>
+      <div className="focus-row">
+        {FOCUS.map(f => <span key={f} className="ftag">{f}</span>)}
+      </div>
+    </>
   );
 }
