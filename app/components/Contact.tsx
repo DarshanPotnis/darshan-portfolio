@@ -44,9 +44,9 @@ export default function Contact() {
         <div>
           <div className="cl-list">
             {([
-              { key: "EMAIL",    val: "potnisd@usc.edu",               href: "mailto:potnisd@usc.edu",                color: "var(--green)" },
+              { key: "EMAIL",    val: "potnisdarshan@gmail.com",               href: "mailto:potnisdarshan@gmail.com",                color: "var(--green)" },
               { key: "GITHUB",   val: "github.com/DarshanPotnis",      href: "https://github.com/DarshanPotnis",      color: "var(--cyan)"  },
-              { key: "LINKEDIN", val: "linkedin.com/in/darshanpotnis", href: "https://linkedin.com/in/darshanpotnis", color: "var(--amber)" },
+              { key: "LINKEDIN", val: "linkedin.com/in/darshanpotnis", href: "https://www.linkedin.com/in/darshan-potnis-9304a3218/", color: "var(--amber)" },
               { key: "RESUME",   val: "Darshan_Potnis_Resume_2026.pdf",href: "/Darshan_Potnis_Resume_2026.pdf",        color: "var(--muted)" },
             ] as const).map(link => (
               <a key={link.key} className="cl-item" href={link.href}
