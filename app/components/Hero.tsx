@@ -1,21 +1,19 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-
-type Section = "hero" | "about" | "skills" | "projects" | "contact";
+import { useEffect, useState } from "react";
 
 const TERM_LINES = [
-  { p: true,  t: "whoami",                                      col: "",              d: 300  },
-  { p: false, t: "darshan-potnis",                              col: "var(--green)",  d: 800  },
-  { p: true,  t: "cat skills.sh | grep primary",                col: "",              d: 1300 },
-  { p: false, t: "Redis · FastAPI · WebSockets · AWS",          col: "var(--muted)",  d: 1800 },
-  { p: true,  t: "echo $AVAILABILITY",                          col: "",              d: 2300 },
-  { p: false, t: "OPEN_TO_WORK=true  # United States",          col: "var(--green)",  d: 2800 },
-  { p: true,  t: "ping hiring-manager.company.com",             col: "",              d: 3200 },
-  { p: false, t: "PONG 12ms — potnisd@usc.edu",                col: "var(--amber)",  d: 3700 },
+  { p: true,  t: "whoami",                                       col: "",             d: 300  },
+  { p: false, t: "darshan-potnis // backend-sde",                col: "var(--accent2)", d: 750  },
+  { p: true,  t: "cat stack.sh | grep primary",                  col: "",             d: 1200 },
+  { p: false, t: "FastAPI · Redis · Node.js · AWS · PostgreSQL", col: "var(--muted)", d: 1650 },
+  { p: true,  t: "echo $AVAILABILITY",                           col: "",             d: 2100 },
+  { p: false, t: "OPEN_TO_WORK=true  # United States",           col: "var(--green)", d: 2500 },
+  { p: true,  t: "ping hiring-manager.company.com",              col: "",             d: 2900 },
+  { p: false, t: "PONG 8ms — potnisdarshan@gmail.com",           col: "var(--amber)", d: 3300 },
 ];
 
-function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
+function Counter({ to, suffix = "", dur = 1100 }: { to: number; suffix?: string; dur?: number }) {
   const [val, setVal] = useState(0);
   useEffect(() => {
     let cur = 0;
@@ -24,191 +22,151 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
       cur += step;
       if (cur >= to) { setVal(to); clearInterval(t); }
       else setVal(Math.floor(cur));
-    }, 1200 / 60);
+    }, dur / 60);
     return () => clearInterval(t);
-  }, [to]);
+  }, [to, dur]);
   return <>{val}{suffix}</>;
 }
 
-export default function Hero({ onNavigate }: { onNavigate: (s: Section) => void }) {
-  const [termLines, setTermLines] = useState<{ p: boolean; t: string; col: string }[]>([]);
-  const [showCaret, setShowCaret] = useState(false);
+export default function Hero() {
+  const [lines, setLines] = useState<{ p: boolean; t: string; col: string }[]>([]);
+  const [caret, setCaret] = useState(false);
 
   useEffect(() => {
-    TERM_LINES.forEach(l => {
-      setTimeout(() => setTermLines(prev => [...prev, { p: l.p, t: l.t, col: l.col }]), l.d);
-    });
-    setTimeout(() => setShowCaret(true), 4100);
+    TERM_LINES.forEach(l => setTimeout(() => setLines(p => [...p, l]), l.d));
+    setTimeout(() => setCaret(true), 3800);
   }, []);
 
-  const CHIPS = ["Redis", "FastAPI", "WebSockets", "AWS EC2", "PostgreSQL", "Docker", "Node.js", "React"];
-
   return (
-    <div style={{ display: "flex", flexDirection: "column", minHeight: "calc(100vh - 32px)" }}>
+    <section style={{ minHeight: "100vh", padding: "130px 80px 80px", display: "flex", alignItems: "center", position: "relative", overflow: "hidden" }}>
+      <style>{`
+        @keyframes hero-up { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes grad-shift { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+        @keyframes line-grow  { to{width:48%} }
+        @keyframes shimmer    { 0%{left:-100%} 100%{left:200%} }
+        @keyframes tcaret     { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+        @keyframes glow-pulse { 0%,100%{box-shadow:0 0 4px var(--green)} 50%{box-shadow:0 0 14px var(--green),0 0 24px rgba(34,197,94,0.3)} }
+        .h1{animation:hero-up 0.7s cubic-bezier(.22,1,.36,1) 0.1s both}
+        .h2{animation:hero-up 0.7s cubic-bezier(.22,1,.36,1) 0.2s both}
+        .h3{animation:hero-up 0.7s cubic-bezier(.22,1,.36,1) 0.3s both}
+        .h4{animation:hero-up 0.7s cubic-bezier(.22,1,.36,1) 0.4s both}
+        .h5{animation:hero-up 0.7s cubic-bezier(.22,1,.36,1) 0.5s both}
+        .h6{animation:hero-up 0.7s cubic-bezier(.22,1,.36,1) 0.65s both}
+        .stat-card { padding:16px 20px; background:var(--bg3); border:1px solid var(--border); border-radius:12px; transition:all 0.25s; position:relative; overflow:hidden; }
+        .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--accent),transparent); opacity:0; transition:opacity 0.3s; }
+        .stat-card:hover { border-color:rgba(99,102,241,0.3); transform:translateY(-4px); box-shadow:0 8px 32px rgba(0,0,0,0.5); }
+        .stat-card:hover::before { opacity:1; }
+        .btn-p { display:inline-flex; align-items:center; gap:8px; padding:13px 30px; border-radius:9px; background:var(--accent); color:#fff; font-size:13px; font-weight:700; text-decoration:none; border:none; cursor:pointer; transition:all 0.22s; }
+        .btn-p:hover { background:#4f46e5; box-shadow:0 0 28px var(--accent-glow); transform:translateY(-2px); }
+        .btn-s { display:inline-flex; align-items:center; gap:8px; padding:12px 26px; border-radius:9px; background:transparent; color:var(--text); font-size:13px; font-weight:600; border:1px solid var(--border2); text-decoration:none; cursor:pointer; transition:all 0.22s; }
+        .btn-s:hover { border-color:rgba(255,255,255,0.28); background:rgba(255,255,255,0.05); transform:translateY(-2px); }
+        .tbadge { font-family:var(--jet); font-size:10px; padding:4px 12px; border-radius:6px; border:1px solid var(--border2); color:var(--muted); transition:all 0.2s; cursor:default; }
+        .tbadge:hover { border-color:var(--accent); color:var(--accent2); background:var(--accent-dim); transform:translateY(-2px); }
+        .t-caret-blink { display:inline-block; width:8px; height:13px; background:var(--accent2); vertical-align:text-bottom; margin-left:2px; animation:tcaret 1.1s step-end infinite; }
+        .award-pill { display:flex; align-items:center; gap:10px; padding:11px 16px; border-radius:9px; border:1px solid; font-size:12px; transition:all 0.2s; }
+        .award-pill:hover { transform:translateY(-2px); }
+      `}</style>
 
-      {/* Sysinfo bar */}
-      <div className="hero-sysinfo">
-        {[
-          { label: "PROCESSOR",  val: "Backend Systems",    sub: "Distributed · Real-time" },
-          { label: "MEMORY",     val: "Redis Streams",      sub: "50k+ req/min" },
-          { label: "STORAGE",    val: "PostgreSQL · S3",    sub: "99.9% uptime" },
-          { label: "NETWORK",    val: "WebSockets · REST",  sub: "<200ms latency" },
-        ].map(item => (
-          <div key={item.label} className="hsi-col">
-            <div className="hsi-label">{item.label}</div>
-            <div className="hsi-val">{item.val}</div>
-            <div className="hsi-sub">{item.sub}</div>
-          </div>
-        ))}
-      </div>
+      {/* bg grid */}
+      <div style={{ position: "fixed", inset: 0, zIndex: -1, backgroundImage: "linear-gradient(rgba(255,255,255,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.018) 1px,transparent 1px)", backgroundSize: "64px 64px", WebkitMaskImage: "radial-gradient(ellipse 80% 80% at 30% 30%,black 20%,transparent 80%)" }} />
+      <div style={{ position: "fixed", inset: 0, zIndex: -2, background: "radial-gradient(ellipse 70% 60% at 30% 40%,rgba(99,102,241,0.07) 0%,transparent 70%)" }} />
 
-      {/* Main two-col */}
-      <div className="hero-body" style={{ flex: 1 }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", width: "100%", display: "grid", gridTemplateColumns: "1fr 420px", gap: 80, alignItems: "center" }}>
 
         {/* LEFT */}
-        <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", paddingRight: 48 }}>
-          <div>
-            <div className="hero-tag">BACKEND_SDE · OPEN_TO_WORK · UNITED_STATES</div>
-
-            <div style={{ marginBottom: 20 }}>
-              <div className="hero-label">// SYSTEM_USER:</div>
-              <div className="hero-name">
-                DARSHAN
-                <span className="hero-name-last">POTNIS</span>
-              </div>
-              <div className="hero-role">
-                <strong>Backend &amp; Distributed Systems</strong> Engineer<br />
-                M.S. Applied Data Science · University of Southern California
-              </div>
-            </div>
-
-            <p className="hero-desc">
-              I build infrastructure that <em>doesn't go down</em>. Real-time pipelines,
-              event-driven microservices, and APIs engineered for <em>the edge cases</em>{" "}
-              that break everyone else's stack.
-            </p>
-
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 28 }}>
-              <button className="cta-primary" onClick={() => onNavigate("projects")}>
-                [ VIEW_PROJECTS ]
-              </button>
-              <button className="cta-ghost" onClick={() => onNavigate("contact")}>
-                [ HIRE_ME ]
-              </button>
-              <a className="cta-ghost" href="/Darshan_Potnis_Resume_2026.pdf" target="_blank" rel="noopener noreferrer">
-                [ RESUME.PDF ]
-              </a>
-            </div>
-
-            <div className="chip-row" style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-              {CHIPS.map(c => <span key={c} className="chip">{c}</span>)}
-            </div>
+        <div>
+          {/* tag pill */}
+          <div className="h1" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "5px 16px", borderRadius: 100, border: "1px solid rgba(99,102,241,0.35)", background: "var(--accent-dim)", fontFamily: "var(--jet)", fontSize: 10, color: "var(--accent2)", letterSpacing: "0.08em", marginBottom: 24, position: "relative", overflow: "hidden" }}>
+            Backend Engineer · New Grad · USC M.S. Dec 2025
+            <span style={{ position: "absolute", top: 0, left: "-100%", width: "100%", height: "100%", background: "linear-gradient(90deg,transparent,rgba(129,140,248,0.2),transparent)", animation: "shimmer 3s ease-in-out infinite" }} />
           </div>
 
-          {/* Stats */}
-          <div style={{ marginTop: 28 }}>
-            <div className="stat-grid">
-              {[
-                { id: "s1", to: 45, suf: "%",  color: "var(--green)", badge: "PERF",  label: "API Latency ↓",   desc: "Redis pipeline @ 99 Yards" },
-                { id: "s2", to: 50, suf: "k+", color: "var(--cyan)",  badge: "THRU",  label: "Req/min peak",    desc: "Marketplace traffic" },
-                { id: "s3", to: 99, suf: "%",  color: "var(--amber)", badge: "SLA",   label: "Uptime SLA",      desc: "Production APIs" },
-                { id: "s4", to: 3,  suf: "",   color: "var(--green)", badge: "SHIP",  label: "Shipped systems", desc: "Full-stack projects" },
-              ].map(s => (
-                <div key={s.id} className="stat-cell">
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
-                    <div className="stat-n" style={{ color: s.color }}>
-                      <Counter to={s.to} suffix={s.suf} />
-                    </div>
-                    <div className="stat-badge" style={{ borderColor: `${s.color}44`, color: s.color }}>{s.badge}</div>
-                  </div>
-                  <div className="stat-label">{s.label}</div>
-                  <div className="stat-desc">{s.desc}</div>
-                </div>
-              ))}
-            </div>
-            <div className="hack-bar" style={{ marginTop: 8 }}>
-              <span style={{ fontSize: 9, letterSpacing: "0.1em", opacity: 0.6 }}>[AWARD]</span>
-              🏆 &nbsp;Winner — USC FinTech Hackathon · 50+ competing teams · Python + AWS
-            </div>
-          </div>
-        </div>
+          {/* name */}
+          <h1 className="h2" style={{ fontFamily: "var(--sans)", fontSize: "clamp(3.2rem,6.5vw,5.8rem)", fontWeight: 900, lineHeight: 0.93, letterSpacing: "-0.05em", marginBottom: 16 }}>
+            <span style={{ display: "block", color: "var(--text)" }}>Darshan</span>
+            <span style={{ display: "block", background: "linear-gradient(135deg,var(--accent),var(--accent2),#a5b4fc)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", backgroundSize: "200% 200%", animation: "grad-shift 4s ease infinite", position: "relative" }}>
+              Potnis.
+              <span style={{ position: "absolute", left: 0, bottom: -6, width: 0, height: 2, background: "linear-gradient(90deg,var(--accent),var(--accent2),transparent)", borderRadius: 2, animation: "line-grow 0.8s 0.9s cubic-bezier(.22,1,.36,1) forwards" }} />
+            </span>
+          </h1>
 
-        {/* RIGHT */}
-        <div className="hero-right">
-          {/* Terminal */}
-          <div className="term">
-            <div className="term-bar">
-              <div className="term-dot" style={{ background: "#ff5f56" }} />
-              <div className="term-dot" style={{ background: "#ffbd2e" }} />
-              <div className="term-dot" style={{ background: "#27c93f" }} />
-              <span className="term-label">darshan@backend-sde ~ zsh</span>
-            </div>
-            <div className="term-body">
-              {termLines.map((l, i) => (
-                <div key={i} className="t-line">
-                  {l.p ? (
-                    <>
-                      <span className="t-prompt">~$</span>
-                      <span className="t-cmd">&nbsp;{l.t}</span>
-                    </>
-                  ) : (
-                    <span style={{ color: l.col || "var(--muted)", paddingLeft: 28 }}>{l.t}</span>
-                  )}
-                </div>
-              ))}
-              {showCaret && (
-                <div className="t-line">
-                  <span className="t-prompt">~$</span>
-                  <span className="t-cmd">&nbsp;</span>
-                  <span className="t-caret" />
-                </div>
-              )}
-            </div>
+          <p className="h3" style={{ fontSize: "1.1rem", color: "var(--muted)", marginBottom: 12, lineHeight: 1.5 }}>
+            <strong style={{ color: "var(--text)", fontWeight: 600 }}>Backend & Distributed Systems</strong> · University of Southern California
+          </p>
+
+          <p className="h4" style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.85, maxWidth: 560, marginBottom: 36 }}>
+            I build systems that handle{" "}
+            <span style={{ color: "var(--text)", fontWeight: 500, background: "linear-gradient(90deg,rgba(99,102,241,0.15),transparent)", padding: "0 4px", borderRadius: 3 }}>real load under real constraints</span>
+            {" "}— high-throughput APIs, event-driven pipelines, and cloud infrastructure on AWS. I care about{" "}
+            <span style={{ color: "var(--text)", fontWeight: 500, background: "linear-gradient(90deg,rgba(99,102,241,0.15),transparent)", padding: "0 4px", borderRadius: 3 }}>correctness, latency, and maintainability</span>.
+          </p>
+
+          <div className="h5" style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 48 }}>
+            <a className="btn-p" href="#projects">View Projects ↓</a>
+            <a className="btn-s" href="#contact">Get in Touch</a>
+            <a className="btn-s" href="/Darshan_Potnis_Resume_2026.pdf" target="_blank" rel="noopener noreferrer">Resume ↗</a>
           </div>
 
-          {/* Process table */}
-          <div style={{ border: "1px solid var(--border)", padding: "14px 16px", background: "var(--surface)" }}>
-            <div style={{ fontSize: 9, color: "var(--amber)", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 10, borderBottom: "1px solid var(--border)", paddingBottom: 6 }}>
-              PROCESS_TABLE
-            </div>
+          {/* stats */}
+          <div className="h6" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10, marginBottom: 14 }}>
             {[
-              { name: "redis-streams",  status: "RUNNING", meta: "45% ↓latency" },
-              { name: "websocket-srv",  status: "RUNNING", meta: "1k+ sessions" },
-              { name: "api-gateway",    status: "RUNNING", meta: "50k req/min"  },
-              { name: "postgres-pool",  status: "STANDBY", meta: "99.9% uptime", amber: true },
-            ].map(p => (
-              <div key={p.name} style={{ display: "flex", justifyContent: "space-between", fontSize: 10, marginBottom: 5 }}>
-                <span style={{ color: "var(--muted)" }}>{p.name}</span>
-                <span style={{ color: p.amber ? "var(--cyan)" : "var(--green)" }}>{p.status}</span>
-                <span style={{ color: "var(--muted2)" }}>{p.meta}</span>
+              { to: 45,  suf: "%",   col: "var(--accent2)", label: "API Latency ↓",    src: "Redis Streams @ 99 Yards"    },
+              { to: 60,  suf: "%",   col: "var(--green)",   label: "Deploy Time ↓",    src: "GitHub Actions + Terraform"  },
+              { to: 99,  suf: ".4%", col: "var(--amber)",   label: "Delivery Rate",    src: "Scienox pipeline"            },
+              { to: 3,   suf: "",    col: "var(--accent2)", label: "Projects Shipped",  src: "All with real metrics"       },
+            ].map((s, i) => (
+              <div key={i} className="stat-card">
+                <div style={{ fontSize: "1.8rem", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1, color: s.col, marginBottom: 6 }}>
+                  <Counter to={s.to} suffix={s.suf} />
+                </div>
+                <div style={{ fontFamily: "var(--jet)", fontSize: 9, color: "var(--muted2)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 2 }}>{s.label}</div>
+                <div style={{ fontSize: 11, color: "var(--muted2)" }}>{s.src}</div>
               </div>
             ))}
           </div>
 
-          {/* Availability */}
-          <div style={{ background: "rgba(0,255,65,0.04)", border: "1px solid rgba(0,255,65,0.18)", padding: "12px 16px" }}>
-            <div style={{ fontSize: 9, color: "var(--muted2)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 6 }}>
-              AVAILABILITY_STATUS
+          {/* award pills */}
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            <div className="award-pill" style={{ background: "rgba(245,158,11,0.07)", borderColor: "rgba(245,158,11,0.28)", color: "var(--amber)" }}>
+              🏆 USC FinTech Hackathon — 1st place · 50+ teams
             </div>
-            <div style={{ fontSize: 11, color: "var(--green)", marginBottom: 3 }}>● OPEN_TO_WORK = TRUE</div>
-            <div style={{ fontSize: 9, color: "var(--muted)" }}>United States · Remote-friendly · Dec 2025 grad</div>
-            <div style={{ fontSize: 9, color: "var(--muted)", marginTop: 2 }}>Full-time SWE / Backend / Distributed Systems roles</div>
+            <div className="award-pill" style={{ background: "rgba(99,102,241,0.07)", borderColor: "rgba(99,102,241,0.28)", color: "var(--accent2)" }}>
+              ☁️ AWS Certified Cloud Practitioner (2024)
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT — terminal */}
+        <div style={{ animation: "hero-up 0.7s cubic-bezier(.22,1,.36,1) 0.45s both" }}>
+          <div style={{ background: "var(--bg3)", border: "1px solid var(--border2)", borderRadius: 14, overflow: "hidden", boxShadow: "0 20px 60px rgba(0,0,0,0.5),0 0 0 1px rgba(255,255,255,0.03)" }}>
+            <div style={{ background: "var(--bg2)", borderBottom: "1px solid var(--border)", padding: "12px 16px", display: "flex", alignItems: "center", gap: 7 }}>
+              {["#ff5f56","#ffbd2e","#27c93f"].map(c => <div key={c} style={{ width: 11, height: 11, borderRadius: "50%", background: c }} />)}
+              <span style={{ marginLeft: 10, fontFamily: "var(--jet)", fontSize: 10, color: "var(--muted2)" }}>darshan@portfolio — zsh</span>
+            </div>
+            <div style={{ padding: 20, fontFamily: "var(--jet)", fontSize: 12, lineHeight: 1.85, minHeight: 148 }}>
+              {lines.map((l, i) => (
+                <div key={i} style={{ display: "flex", gap: 10, animation: "hero-up 0.25s ease both" }}>
+                  {l.p
+                    ? <><span style={{ color: "var(--accent2)", opacity: 0.7 }}>~$</span><span style={{ color: "var(--text)" }}>&nbsp;{l.t}</span></>
+                    : <span style={{ color: l.col || "var(--muted)", paddingLeft: 32 }}>{l.t}</span>}
+                </div>
+              ))}
+              {caret && (
+                <div style={{ display: "flex", gap: 10 }}>
+                  <span style={{ color: "var(--accent2)", opacity: 0.7 }}>~$</span>
+                  <span style={{ color: "var(--text)" }}>&nbsp;</span>
+                  <span className="t-caret-blink" />
+                </div>
+              )}
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 7, padding: "14px 20px", borderTop: "1px solid var(--border)" }}>
+              {["FastAPI","Redis","Node.js","PostgreSQL","AWS","Docker","Terraform","WebSockets"].map(t => (
+                <span key={t} className="tbadge">{t}</span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Function key bar */}
-      <div className="hero-bottom">
-        {[
-          { label: "About",    id: "about"    as Section },
-          { label: "Stack",    id: "skills"   as Section },
-          { label: "Projects", id: "projects" as Section },
-          { label: "Contact",  id: "contact"  as Section },
-        ].map(item => (
-          <span key={item.id} className="fn-key" onClick={() => onNavigate(item.id)}>{item.label}</span>
-        ))}
-        <span className="fn-key" onClick={() => window.open("/Darshan_Potnis_Resume_2026.pdf")}>Resume</span>
-      </div>
-    </div>
+    </section>
   );
 }
