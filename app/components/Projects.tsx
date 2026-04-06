@@ -100,8 +100,8 @@ const PROJECTS = [
       { val: "500MB", label: "max file, chunked"      },
       { val: "<20ms", label: "RBAC query response"   },
     ],
-    github: "",
-    live: "",
+    github: "https://github.com/DarshanPotnis/cloud-storage",
+    live: "https://cloud-storage-delta.vercel.app",
     Diagram: StorageDiagram,
   },
 ] as const;
